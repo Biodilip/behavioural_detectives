@@ -24,3 +24,6 @@
 * Shiny app - "scientific study" to try to fit data and extract parameters and understand - Dilip and MK
 * Other lit suggestions - Sam
 * Fill in template - Dilip
+
+# Minutes  04 July 2023, 12:00
+
