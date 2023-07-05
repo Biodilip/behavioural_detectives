@@ -27,3 +27,34 @@
 
 # Minutes  04 July 2023, 12:00
 
+Effects to be investigated:
+
+Model 1 - Heterogeneity
+
+Model 2 - Behavior
+
+Model 3 - Both
+
+
+Tasks:
+Cameline - push completed functions - completed
+MK and Dilip- review code 
+Martha - look into MLE
+
+# Minutes  05 July 2023, 12:00
+
+Analysis plan:
+Settings - Base case parameters for HIV and Ebola
+Varying over a range of parameters
+
+Action - 
+1. Dilip to create an analysis plan based on the setting and effects
+2. Cameline and MK to review the code (dynamic n)
+3. Martha to start working on MLE function
+
+
+
+
+
+
+
