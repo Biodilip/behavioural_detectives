@@ -40,7 +40,7 @@ source("code/box_car_infections.r")
 ## Function that makes a list of disease parameters with default values
 disease_params <- function(Beta = 0.9 ## transmission coefficient when prevalence is 0 
                            , alpha = 8 ## for transmission coefficient: decline with prevalence
-                           , n = 1 ## number of box  cars
+                           , n = 2 ## number of box  cars
                            , pRt = (1/10)*n ## rate of of progression through each of the I classes, for 10 years total
                            , bRt = 1/60 ## birth rate = death rates in a closed popn
                            , dRt = 1/60 ## 60 year natural life expectancy
@@ -71,8 +71,8 @@ HIV_SI <- function(t,y,parms,n){
     I <-  sum(I_vec)          ## total infected
     N <- I + S                 ## total population
     lambda <- hetero_lambda(Beta,alpha,I,N)
-    #lambda <- behaviour_mort_effect(Beta,alpha,I,N,n,I4,q)
-    #lambda <- both_effects(Beta,alpha,I,N,n,I4,q)
+    #lambda <- behaviour_mort_effect(Beta,alpha,I,N,n,tail(I_vec,n=1),q)
+    #lambda <- both_effects(Beta,alpha,I,N,n,tail(I_vec,n=1),q)
     ## state variable derivatives (ODE system)
     
     deriv <- rep(NA,3+(n)) # number of derivatives
@@ -96,7 +96,7 @@ SI.ts <- data.table(lsoda(
 
 
 SI.ts$I <- rowSums(SI.ts[,3:(k+2)])
-SI.ts <- SI.ts[,-3:-(k+2)]
+#SI.ts <- SI.ts[,-3:-(k+2)]
 SI.ts$N <- rowSums(SI.ts[,3:ncol(SI.ts)])
 SI.ts[, P := I / N]
 
@@ -108,7 +108,7 @@ SI.ts.long <- melt(SI.ts, id.vars = 'time')
   + geom_line()
 )
 
-(ggplot(SI.ts.long[variable %in% c('S', 'I', 'P')])
+(ggplot(SI.ts.long[variable %in% c('S', 'I', 'CD')])
   + aes(x = time, y = value)
   + geom_line()
   + facet_wrap(~ variable)
