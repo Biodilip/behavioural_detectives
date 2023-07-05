@@ -17,6 +17,7 @@ library(ggplot2)
 
 rm(list=ls())                   # Clear all variables and functions
 
+<<<<<<< HEAD
 setwd("C:/Users/corlendo/behavioural_detectives")
 source("code/hetero_lambda.r")
 source("code/behaviour_mort_effect.r")
@@ -24,6 +25,12 @@ source("code/both_effects.r")
 source("code/box_car_infections.r")
 source("code/HIV_SI_ODEs.r")
 
+=======
+source("hetero_lambda.r")
+source("behaviour_mort_effect.r")
+source("both_effects.r")
+source("box_car_infections.r")
+>>>>>>> 66c355e48fe982936e9c866e2c41aa3412a3949b
 ## Our state variables
 ## 
 ## S(t) - The number of susceptible adults over the age of 25 years at time t
