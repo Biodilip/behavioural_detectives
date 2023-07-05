@@ -56,7 +56,7 @@ HIV_SI <- function(t,y,parms){
     return(list(deriv))
   })
 }
-
+#function that calculates the effect of hetereogenity in infection risk and returns the FOI 
 hetero_lambda <- function(Bt,a,inf,total) {
                  ## total population
     lambdahat <- Bt * exp(-a * inf/total) ## Infectious contact rate
@@ -64,6 +64,7 @@ hetero_lambda <- function(Bt,a,inf,total) {
   return (FOI)
 }
 
+#function that calculates the effect of behaviour  and returns the FOI 
 behaviour_mort_effect <- function(Bt,a,inf,total,g,I4,q) {
   ## total population
   lambdahat <- Bt  ## Infectious contact rate
@@ -72,7 +73,7 @@ behaviour_mort_effect <- function(Bt,a,inf,total,g,I4,q) {
   return (FOI)
 }
 
-
+#function that calculates rthe effect of both hetereogenity in infection risk and behaviour and returns the FOI 
 both_effects <- function(Bt,a,inf,total,g,I4,q) {
   ## total population
   lambdahat <- Bt * exp(-a * inf/total) ## Infectious contact rate
@@ -94,7 +95,7 @@ disease_params <- function(Beta = 0.9 ## transmission coefficient when prevalenc
 }
 
 disease_params()
-
+#Initial conditions
 initPrev <- exp(-7) ## infected at start
 pop.SI0 <- c(S=1-initPrev, 
              I1=initPrev, 
@@ -103,8 +104,7 @@ pop.SI0 <- c(S=1-initPrev,
              CD = 0)      #Initial conditions
 time.out <- seq(0, 365, 1)
 
-## Now let's see what happens if we plug our inputs into lsoda()...
-
+## Solve ODE using lsoda()...
 model1_ts <- data.table(lsoda(
   y = pop.SI0,               # Initial conditions for population
   times = time.out,             # Timepoints for evaluation
@@ -112,12 +112,12 @@ model1_ts <- data.table(lsoda(
   parms = disease_params()               # Vector of parameters
 ))
 
-
+#format solutions to have I, N and P
 model1_ts[, I := I1 + I2 + I3 + I4]
 model1_ts[, N := S+I]
 model1_ts[, P := I / N]
 
-
+#plot output
 with(model1_ts, {
   # plotting the time series of susceptibles:
   plot(time, S, type = "l", col = "blue",
