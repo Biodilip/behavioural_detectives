@@ -12,8 +12,8 @@
 
 * Heterogeneity
     - As a function of prevalence
-    - *As a function of a death compartment for memory*
     - *As a function of cumulative incidence*
+    - *As a function of a cumulative deaths - death compartment for memory?*
 
 * Behaviour
     - As a function of mortality
