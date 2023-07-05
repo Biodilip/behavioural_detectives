@@ -1,0 +1,5 @@
+S. No.,Author_year,Het_function,Disease,Model,Notes
+1,Hargrave_2011,lambdaHat=lambda*exp(-a*I/N),HIV,SI boxcar,Heterogeneity in sexual behaviour
+2,Jason Asher,reproductive rate r(t) ,Ebola,SEIR,Discrete-time stochastic compartmental model with a time-varying reproductive number 
+3,Nguyen et al,"Y(t) _ NegBin(_(t), _)",COVID,Pseudo SIR (New cases- hospitalizartion-icu- recover),
+,,,,,
