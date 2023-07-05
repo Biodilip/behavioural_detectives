@@ -24,43 +24,44 @@ rm(list=ls())                   # Clear all variables and functions
 
 ## and parameters:
 ##
-## N - the total population size; N = S + I [inidividuals]
-## birthRt - per capita birth rate [1 / time]
-## lambda - per capita effective rate
-## delta - disease induced mortality hazard
-## deathRt - per capita mortality rate
+## N - the total population size; N = S + I [individuals]
+## bRt - per capita birth rate [1 / time]
+## dRt - per capita mortality rate
 ## Beta - transmission coefficient when prevalence is 0 
 ##alpha - for transmission coefficient: decline with prevalence
 
 
 ##-- HIV - SI model from --Hargrove, John W., et al. 
 #"Declining HIV prevalence and incidence in perinatal women in Harare, Zimbabwe." Epidemics 3.2 (2011): 88-94.
-HIV_SI <- function(t,y,parms){
+HIV_SI <- function(t,y,parms,n){
   with(c(as.list(y),parms),{
     #N <- sum(y)
     
-    I <- I1+I2+I3+I4           ## total infected
+    I_vec <- y[2:(n+1)]
+    I <-  sum(I_vec)          ## total infected
     N <- I + S                 ## total population
-    #lambda <- hetero_lambda(Beta,alpha,I,N)
+    #labda <- hetero_lambda(Beta,alpha,I,N)
     #lambda <- behaviour_mort_effect(Beta,alpha,I,N,n,I4,q)
     lambda <- both_effects(Beta,alpha,I,N,n,I4,q)
     ## state variable derivatives (ODE system)
-    deriv <- rep(NA,7)
+    
+    deriv <- rep(NA,3+(n)) # number of derivatives
     deriv[1] <-	bRt*N - (lambda+dRt)*S  ## Instantaneous rate of change: Susceptibles
-    deriv[2] <-	(lambda+dRt)*S - pRt*I1 - dRt*I1 ## Instantaneous rate of change: Infection class I1
-    deriv[3] <-	pRt*I1 - pRt*I2 - dRt*I2 ## Instantaneous rate of change:  Infection class I2
-    deriv[4] <-	pRt*I2 - pRt*I3 - dRt*I3 ## Instantaneous rate of change: Infection class I3 
-    deriv[5] <-	pRt*I3 - pRt*I4 - dRt*I4 ## Instantaneous rate of change: Infection class I4
-    deriv[6] <-	(lambda)*S ## Instantaneous rate of change: Cumulative incidence
-    deriv[7] <-	pRt*I4 ## Instantaneous rate of change: Cumulative mortality
+    #deriv[2] <-	(lambda+dRt)*S - pRt*I1 - dRt*I1 ## Instantaneous rate of change: Infection class I1
+    #deriv[3] <-	pRt*I1 - pRt*I2 - dRt*I2 ## Instantaneous rate of change:  Infection class I2
+    #deriv[4] <-	pRt*I2 - pRt*I3 - dRt*I3 ## Instantaneous rate of change: Infection class I3 
+    #deriv[5] <-	pRt*I3 - pRt*I4 - dRt*I4 ## Instantaneous rate of change: Infection class I4
+    deriv[2:(n+1)] <- box_car_infections(S, I_vec,lambda, dRt,pRt)
+    deriv[(length(deriv)-1)] <-	(lambda)*S ## Instantaneous rate of change: Cumulative incidence
+    deriv[length(deriv)] <-	pRt*deriv[n+1] ## Instantaneous rate of change: Cumulative mortality
     return(list(deriv))
   })
 }
 #function that calculates the effect of hetereogenity in infection risk and returns the FOI 
 hetero_lambda <- function(Bt,a,inf,total) {
-                 ## total population
-    lambdahat <- Bt * exp(-a * inf/total) ## Infectious contact rate
-    FOI <- lambdahat*(inf/total)
+  ## total population
+  lambdahat <- Bt * exp(-a * inf/total) ## Infectious contact rate
+  FOI <- lambdahat*(inf/total)
   return (FOI)
 }
 
@@ -81,11 +82,27 @@ both_effects <- function(Bt,a,inf,total,g,I4,q) {
   FOI <- mortResponse*lambdahat*(inf/total)
   return (FOI)
 }
+#function
+
+box_car_infections <- function(S, I_vec,lambda, dRt,pRt) {
+  n <- length(I_vec)
+  dI_vec <- numeric(n)
+  dI_vec[1] <- (lambda)*S - pRt * I_vec[1] - dRt * I_vec[1]
+  if (n > 1 ) {
+    for (i in 2:n) {
+      dI_vec[i] <- pRt * I_vec[i-1] - pRt * I_vec[i] - dRt * I_vec[i] 
+    }
+  }
+  return(dI_vec)
+}
+
+
+
 
 ## Function that makes a list of disease parameters with default values
 disease_params <- function(Beta = 0.9 ## transmission coefficient when prevalence is 0 
                            , alpha = 8 ## for transmission coefficient: decline with prevalence
-                           , n = 4 # number of box cars
+                           , n = 4 ## number of box  cars
                            , pRt = (1/10)*n ## rate of of progression through each of the I classes, for 10 years total
                            , bRt = .03 ## birth rate, 3% of people give birth per year
                            , dRt = 1/60 ## 60 year natural life expectancy
@@ -94,15 +111,23 @@ disease_params <- function(Beta = 0.9 ## transmission coefficient when prevalenc
   return(as.list(environment()))
 }
 
-disease_params()
+
 #Initial conditions
 initPrev <- exp(-7) ## infected at start
+k = disease_params()$n
+I_vec <- rep(0,(k-1))
+names(I_vec) <- paste0("I",2:k)
 pop.SI0 <- c(S=1-initPrev, 
              I1=initPrev, 
-             I2=0, I3=0, 
-             I4=0, CI = 0, 
+             I_vec, CI = 0, 
              CD = 0)      #Initial conditions
 time.out <- seq(0, 365, 1)
+
+
+
+
+# Set name to Vector
+
 
 ## Solve ODE using lsoda()...
 model1_ts <- data.table(lsoda(
@@ -111,6 +136,8 @@ model1_ts <- data.table(lsoda(
   func = HIV_SI,                   # Function to evaluate
   parms = disease_params()               # Vector of parameters
 ))
+
+
 
 #format solutions to have I, N and P
 model1_ts[, I := I1 + I2 + I3 + I4]
