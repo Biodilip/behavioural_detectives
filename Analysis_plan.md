@@ -39,6 +39,7 @@
 
 * Behaviour
     - As a function of mortality
+    - *As a function of time to isolation?*
 
 * Heterogeneity x Behaviour
 
