@@ -17,7 +17,7 @@ library(ggplot2)
 
 rm(list=ls())                   # Clear all variables and functions
 
-#setwd("C:/Users/corlendo/behavioural_detectives")
+setwd("C:/Users/corlendo/behavioural_detectives")
 source("code/hetero_lambda.r")
 source("code/no_effect.r")
 source("code/behaviour_mort_effect.r")
@@ -65,17 +65,17 @@ SI.ts <- data.table(lsoda(
 
 
 SI.ts$I <- rowSums(SI.ts[,3:(k+2)])
-SI.ts <- SI.ts[,-3:-(k+2)]
+#SI.ts <- SI.ts[,-3:-(k+2)]
 SI.ts$N <- SI.ts[,I] + SI.ts[,S]
 SI.ts[, P := CI / N]
 
 #plot output
 SI.ts.long <- melt(SI.ts, id.vars = 'time')
 
-(ggplot(SI.ts.long)
-  + aes(x = time, y = value, color = variable, linetype = variable)
-  + geom_line()
-)
+#(ggplot(SI.ts.long)
+ # + aes(x = time, y = value, color = variable, linetype = variable)
+#  + geom_line()
+#)
 
 (ggplot(SI.ts.long[variable %in% c('S', 'I', "CI","CD","N")])
   + aes(x = time, y = value)
