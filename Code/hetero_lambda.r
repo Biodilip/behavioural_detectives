@@ -3,8 +3,8 @@ hetero_lambda <- function(Bt,a,inf,total) {
   ## total population
   lambdahat <- Bt * exp(-a * inf/total) ## Infectious contact rate
   FOI <- lambdahat*(inf/total)
-  output <- cbind(FOI,lambdahat)
-  return (output)
+  #output <- cbind(FOI,lambdahat)
+  return (FOI)
 }
 # Bt <- 1.1
 # a  = 4
