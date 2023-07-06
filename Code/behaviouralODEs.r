@@ -84,13 +84,13 @@ SI.ts.long <- melt(SI.ts, id.vars = 'time')
 )
 
 
-SI.ts_both_effect_q_10_alpha_45_n_4_beta_half <- SI.ts.long
+SI.ts_hetero_effect_q_10_alpha_45_n_4_beta_half <- SI.ts.long
 
 #save to rda file
-#save(SI.ts_no_effect_q_10_alpha_45_n_4_beta_half, file = "no_effect_q_0_alpha_0_n_4_beta_half.rda")
-#save(SI.ts_both_effect_q_10_alpha_45_n_4_beta_half, file = "hetero_effect_q_0_alpha_45_n_4_beta_half.rda")
-#save(SI.ts_behaviour_effect_q_10_alpha_45_n_4_beta_half, file = "behaviour_effect_q_10_alpha_45_n_4_beta_half.rda")
-save(SI.ts_both_effect_q_10_alpha_45_n_4_beta_half, file = "both_effect_q_10_alpha_45_n_4_beta_half.rda")
+#save(SI.ts_no_effect_q_10_alpha_25_n_4_beta_full, file = "no_effect_q_0_alpha_25_n_4_beta_full.rda")
+#save(SI.ts_hetero_effect_q_10_alpha_45_n_4_beta_half, file = "hetero_effect_q_10_alpha_45_n_4_beta_half.rda")
+#save(SI.ts_behaviour_effect_q_10_alpha_25_n_4_beta_full, file = "behaviour_effect_q_10_alpha_25_n_4_beta_full.rda")
+#save(SI.ts_both_effect_q_10_alpha_25_n_4_beta_full, file = "both_effect_q_10_alpha_25_n_4_beta_full.rda")
 
 
 
