@@ -15,9 +15,9 @@ HIV_SI_ODEs <- function(t,y,parms,n){
     N <- I + S                 ## total population
     
     #lambda <- no_effect(Beta,I,N)
-    lambda <- hetero_lambda(Beta,alpha,I,N)
+    #lambda <- hetero_lambda(Beta,alpha,I,N)
     #lambda <- behaviour_mort_effect(Beta,alpha,I,N,n,tail(I_vec,n=1),q)
-    #lambda <- both_effects(Beta,alpha,I,N,n,tail(I_vec,n=1),q)
+    lambda <- both_effects(Beta,alpha,I,N,n,tail(I_vec,n=1),q)
     ## state variable derivatives (ODE system)
     
     deriv <- rep(NA,3+(n)) # number of derivatives
