@@ -33,12 +33,12 @@ source("code/HIV_SI_ODEs.r")
 ## Function that makes a list of disease parameters with default values
 disease_params <- function(Beta = 0.2/30 ## transmission coefficient when prevalence is 0 
                            , alpha = 4.5 ## for transmission coefficient: decline with prevalence
-                           , n = 1 ## number of box  cars
+                           , n = 4 ## number of box  cars
                            , daysYear = 365 ## no of days in a year
                            , pRt = (1/(10*daysYear))*n ## rate of of progression through each of the I classes, for 10 years total
                            , bRt = 1/(60*daysYear) ## birth rate = death rates in a closed popn
                            , dRt = 1/(60*daysYear) ## 60 year natural life expectancy
-                           , q = 4 # effect of behaviour change on mortality
+                           , q = 10 # effect of behaviour change on mortality
 ){
   return(as.list(environment()))
 }
@@ -73,24 +73,36 @@ SI.ts[, P := I / N]
 SI.ts[, CIR := CI / N]
 SI.ts[, CDR := CD / N]
 #plot output
+
+
 SI.ts.long <- melt(SI.ts, id.vars = 'time')
-
-#save to rda file
-#save(SI.ts.long, file = "no_effect_q_0_alpha_0_n_1.rda")
-#save(SI.ts.long, file = "no_effect_q_0_alpha_0_n_4.rda")
-#save(SI.ts.long, file = "hetero_effect_q_0_alpha_45_n_1.rda")
-#save(SI.ts.long, file = "hetero_effect_q_0_alpha_45_n_4.rda")
-save(SI.ts.long, file = "behaviour_effect_q_4_alpha_45_n_1.rda")
-
-
-#(ggplot(SI.ts.long)
- # + aes(x = time, y = value, color = variable, linetype = variable)
-#  + geom_line()
-#)
 
 (ggplot(SI.ts.long[variable %in% c('S', 'I', "P","CDR","CD","N")])
   + aes(x = time, y = value)
   + geom_line()
   + facet_wrap(~ variable,scales = "free")
 )
+
+
+SI.ts_both_effect_q_10_alpha_45_n_4 <- SI.ts.long
+
+#save to rda file
+#(SI.ts_no_effect_q_0_alpha_0_n_4, file = "no_effect_q_0_alpha_0_n_4.rda")
+#save(SI.ts.long, file = "no_effect_q_0_alpha_0_n_4.rda")
+#(SI.ts_hetero_effect_q_0_alpha_45_n_4, file = "hetero_effect_q_0_alpha_45_n_4.rda")
+#save(SI.ts.long, file = "hetero_effect_q_0_alpha_45_n_4.rda")
+#save(SI.ts_behaviour_effect_q_10_alpha_45_n_4, file = "behaviour_effect_q_10_alpha_45_n_4.rda")
+#save(SI.ts.long, file = "behaviour_effect_q_4_alpha_45_n_4.rda")
+#save(SI.ts.long, file = "behaviour_effect_q_10_alpha_45_n_1.rda")
+#save(SI.ts.long, file = "behaviour_effect_q_10_alpha_45_n_4.rda")
+#save(SI.ts_both_effect_q_10_alpha_45_n_4, file = "both_effect_q_10_alpha_45_n_4.rda")
+#save(SI.ts.long, file = "both_effect_q_4_alpha_45_n_4.rda")
+#save(SI.ts.long, file = "both_effect_q_10_alpha_45_n_1.rda")
+#save(SI.ts.long, file = "both_effect_q_10_alpha_45_n_4.rda")
+
+
+#(ggplot(SI.ts.long)
+ # + aes(x = time, y = value, color = variable, linetype = variable)
+#  + geom_line()
+#)
 
