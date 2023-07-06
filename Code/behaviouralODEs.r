@@ -46,10 +46,10 @@ disease_params <- function(Beta = 0.2/30 ## transmission coefficient when preval
 #Initial conditions
 initPrev <- exp(-7) ## infected at start
 k = disease_params()$n
-I_vec <- rep(0,(k-1))
-names(I_vec) <- paste0("I",2:k)
+I_vec <- rep(0,(k))
+I_vec[1] <- initPrev
+names(I_vec) <- paste0("I",1:k)
 pop.SI0 <- c(S=1-initPrev, 
-             I1=initPrev, 
              I_vec, CI = 0, 
              CD = 0)      #Initial conditions
 noyears <- 40

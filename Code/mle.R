@@ -29,7 +29,7 @@ tseqMonth <- seq(1,365, by = 12)
 
 
 ## Function to run the deterministic model simulation, based on the ODE system defined in HIV_SI().
-simEpidemic <- function(init, tseq = tseqMonth, modFunction=HIV_SI, parms = disease_params()) {
+simEpidemic <- function(init, tseq = tseqMonth, modFunction=HIV_SI_ODEs, parms = disease_params()) {
     simDat <- as.data.frame(lsoda(init, tseq, modFunction, parms=parms))
     simDat$I <- rowSums(simDat[, Is])
     simDat$N <- rowSums(simDat[, c('S',Is)])
@@ -44,7 +44,7 @@ simEpidemic <- function(init, tseq = tseqMonth, modFunction=HIV_SI, parms = dise
 
 sampleEpidemic <- function(simDat # Simulated "data" which we treat as real 
 	, sampleDates = seq(1, 365, by = 20) # Sample every 3 days 
-	, numSamp = rep(80, length(sampleDates)) # Number of individuals sampled at each time point
+	, numSamp = rep(1000, length(sampleDates)) # Number of individuals sampled at each time point
 ){
     prev_at_sample_times <- simDat[simDat$time %in% sampleDates, 'P']
     numPos <- rbinom(length(numSamp), numSamp, prev_at_sample_times)
@@ -298,3 +298,8 @@ legend("topleft",
 
 # If parameter is a proportion, we use log of odds ie log(p/1-p) to optimise
 
+
+# simulate
+# sample
+# fit
+# compare fit values and 
