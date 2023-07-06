@@ -50,3 +50,5 @@
     - initial no. of cases
 
 * Construct plot with parameters against the FOI (or others)
+* justification for base parameters
+* 
