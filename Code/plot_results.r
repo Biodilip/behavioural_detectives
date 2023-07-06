@@ -12,6 +12,8 @@
 #library(deSolve)                # Load library to be used for numerical integration
 library(data.table)
 library(ggplot2)
+library(dplyr)
+library(viridis)
 
 
 
@@ -19,7 +21,7 @@ rm(list=ls())                   # Clear all variables and functions
 
 
 
-#setwd("C:/Users/corlendo/behavioural_detectives/base_parms_objects")
+setwd("C:/Users/corlendo/behavioural_detectives/base_parms_objects")
 ## Script that plots our results 
 
 #import data files
@@ -38,14 +40,61 @@ both_effect_q_4_alpha_45_n_4.rda <- load(file="both_effect_q_4_alpha_45_n_4.rda"
 both_effect_q_10_alpha_45_n_1.rda <- load(file="both_effect_q_10_alpha_45_n_1.rda")
 both_effect_q_10_alpha_45_n_4.rda <- load(file="both_effect_q_10_alpha_45_n_4.rda")
 
+# Add id column
+SI.ts_behaviour_effect_q_10_alpha_45_n_1[,model:="MQ1"]
+SI.ts_behaviour_effect_q_10_alpha_45_n_4[,model:="MQ4"]
+SI.ts_behaviour_effect_q_4_alpha_45_n_1[,model:="Mq1"]
+SI.ts_behaviour_effect_q_4_alpha_45_n_4[,model:="Mq4"]
+SI.ts_both_effect_q_10_alpha_45_n_1[,model:="HMQ1"]
+SI.ts_both_effect_q_10_alpha_45_n_4[,model:="HMQ4"]  
+SI.ts_both_effect_q_4_alpha_45_n_1[,model:="HMq1"]
+SI.ts_both_effect_q_4_alpha_45_n_4[,model:="HMq4"]
+SI.ts_hetero_effect_q_0_alpha_45_n_1[,model:="H1"]
+SI.ts_hetero_effect_q_0_alpha_45_n_4[,model:="H4"]
+SI.ts_no_effect_q_0_alpha_0_n_1[,model:="B1"]
+SI.ts_no_effect_q_0_alpha_0_n_4[,model:="B4"]
+
+rbind(SI.ts_behaviour_effect_q_10_alpha_45_n_1,SI.ts_behaviour_effect_q_10_alpha_45_n_4,
+SI.ts_behaviour_effect_q_4_alpha_45_n_1,SI.ts_behaviour_effect_q_4_alpha_45_n_4,
+SI.ts_both_effect_q_10_alpha_45_n_1,SI.ts_both_effect_q_10_alpha_45_n_4,
+SI.ts_both_effect_q_4_alpha_45_n_1,SI.ts_both_effect_q_4_alpha_45_n_4,
+SI.ts_hetero_effect_q_0_alpha_45_n_1,SI.ts_hetero_effect_q_0_alpha_45_n_4,
+SI.ts_no_effect_q_0_alpha_0_n_1, SI.ts_no_effect_q_0_alpha_0_n_4)->plot_HIV
 
 
 
-
-
-(ggplot(SI.ts.long[variable %in% c('S', 'I', "P","CDR","CD","N")])
-  + aes(x = time, y = value)
+(ggplot(plot_HIV[variable %in% c('S','P','CDR')])
+  + aes(x = time, y = value, group=variable,color=variable)
   + geom_line()
-  + facet_wrap(~ variable,scales = "free")
+  + facet_wrap(~ model,scales = "free")
 )
 
+# New facet label names for supp variable
+supp.labs <- c("No effect", "Heterogeneity","Both effects","Behaviour")
+names(supp.labs) <- c("B4", "H4","HMQ4","MQ4")
+
+# Create the plot
+p + facet_grid(
+  dose ~ supp, 
+  labeller = labeller(dose = dose.labs, supp = supp.labs)
+)
+
+
+pp <- plot_HIV[ (variable %in% c('S','P')) & (model %in% c("B4","H4","MQ4","HMQ4")),]
+(ggplot(pp)
+  + aes(x = time, y = value, group=variable,color=variable)
+  + geom_line()
+  + facet_wrap(~ model,labeller = labeller(model = supp.labs), ncol = 4)+
+    xlab("Days") + ylab("Proportion of popn. ")+
+    scale_fill_viridis() + theme_bw()
+)
+
+
+pcdr <- plot_HIV[ (variable %in% c('CDR')) & (model %in% c("B4","H4","MQ4","HMQ4")),]
+(ggplot(pcdr)
+  + aes(x = time, y = value, group=variable,color=variable)
+  + geom_line()
+  + facet_wrap(~ model,labeller = labeller(model = supp.labs), ncol = 4)+
+    xlab("Days") + ylab("Proportion of popn. ")+
+    scale_fill_viridis() + theme_bw()
+)

@@ -1,5 +1,5 @@
 
-
+setwd("C:/Users/corlendo/behavioural_detectives")
 source("./Code/nllikelihood.R")
 
 ## First look up how optim() works. The more you read through the help

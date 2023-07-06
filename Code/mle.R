@@ -6,7 +6,7 @@
 
 ###################################################################### 
 
-## By the end of this tutorial you shouldâ€¦
+## By the end of this tutorial you shouldâ¦
 
 ## * Understand how to simulate cross-sectional prevalence data around a simulated epidemic.
 ## * Calculate a binomial likelihood from these prevalence data and a fully specified epidemic model.

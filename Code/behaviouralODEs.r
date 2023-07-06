@@ -17,7 +17,7 @@ library(ggplot2)
 
 rm(list=ls())                   # Clear all variables and functions
 
-#setwd("C:/Users/corlendo/behavioural_detectives")
+setwd("C:/Users/corlendo/behavioural_detectives")
 source("code/hetero_lambda.r")
 source("code/no_effect.r")
 source("code/behaviour_mort_effect.r")
@@ -31,7 +31,7 @@ source("code/HIV_SI_ODEs.r")
 
 #1) Define the disease parameters
 ## Function that makes a list of disease parameters with default values
-disease_params <- function(Beta = 0.2/30 ## transmission coefficient when prevalence is 0 
+disease_params <- function(Beta = 0.2/(30*2) ## transmission coefficient when prevalence is 0 
                            , alpha = 4.5 ## for transmission coefficient: decline with prevalence
                            , n = 4 ## number of box  cars
                            , daysYear = 365 ## no of days in a year
@@ -84,21 +84,14 @@ SI.ts.long <- melt(SI.ts, id.vars = 'time')
 )
 
 
-SI.ts_both_effect_q_10_alpha_45_n_4 <- SI.ts.long
+SI.ts_both_effect_q_10_alpha_45_n_4_beta_half <- SI.ts.long
 
 #save to rda file
-#(SI.ts_no_effect_q_0_alpha_0_n_4, file = "no_effect_q_0_alpha_0_n_4.rda")
-#save(SI.ts.long, file = "no_effect_q_0_alpha_0_n_4.rda")
-#(SI.ts_hetero_effect_q_0_alpha_45_n_4, file = "hetero_effect_q_0_alpha_45_n_4.rda")
-#save(SI.ts.long, file = "hetero_effect_q_0_alpha_45_n_4.rda")
-#save(SI.ts_behaviour_effect_q_10_alpha_45_n_4, file = "behaviour_effect_q_10_alpha_45_n_4.rda")
-#save(SI.ts.long, file = "behaviour_effect_q_4_alpha_45_n_4.rda")
-#save(SI.ts.long, file = "behaviour_effect_q_10_alpha_45_n_1.rda")
-#save(SI.ts.long, file = "behaviour_effect_q_10_alpha_45_n_4.rda")
-#save(SI.ts_both_effect_q_10_alpha_45_n_4, file = "both_effect_q_10_alpha_45_n_4.rda")
-#save(SI.ts.long, file = "both_effect_q_4_alpha_45_n_4.rda")
-#save(SI.ts.long, file = "both_effect_q_10_alpha_45_n_1.rda")
-#save(SI.ts.long, file = "both_effect_q_10_alpha_45_n_4.rda")
+#save(SI.ts_no_effect_q_10_alpha_45_n_4_beta_half, file = "no_effect_q_0_alpha_0_n_4_beta_half.rda")
+#save(SI.ts_both_effect_q_10_alpha_45_n_4_beta_half, file = "hetero_effect_q_0_alpha_45_n_4_beta_half.rda")
+#save(SI.ts_behaviour_effect_q_10_alpha_45_n_4_beta_half, file = "behaviour_effect_q_10_alpha_45_n_4_beta_half.rda")
+save(SI.ts_both_effect_q_10_alpha_45_n_4_beta_half, file = "both_effect_q_10_alpha_45_n_4_beta_half.rda")
+
 
 
 #(ggplot(SI.ts.long)
