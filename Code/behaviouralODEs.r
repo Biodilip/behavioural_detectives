@@ -18,12 +18,12 @@ library(ggplot2)
 rm(list=ls())                   # Clear all variables and functions
 
 setwd("C:/Users/corlendo/behavioural_detectives")
-source("code/hetero_lambda.r")
-source("code/no_effect.r")
-source("code/behaviour_mort_effect.r")
-source("code/both_effects.r")
-source("code/box_car_infections.r")
-source("code/HIV_SI_ODEs.r")
+source("Code/hetero_lambda.r")
+source("Code/no_effect.r")
+source("Code/behaviour_mort_effect.r")
+source("Code/both_effects.r")
+source("Code/box_car_infections.r")
+source("Code/HIV_SI_ODEs.r")
 
 
 ## Script that explores the effect of heterogeneity or behaviour on model 
