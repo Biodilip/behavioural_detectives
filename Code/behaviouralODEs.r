@@ -65,13 +65,15 @@ SI.ts <- data.table(lsoda(
    parms = disease_params()
  ))
 
-
 SI.ts$I <- rowSums(SI.ts[,3:(k+2)])
 SI.ts <- SI.ts[,-3:-(k+2)]
 SI.ts$N <- SI.ts[,I] + SI.ts[,S]
 SI.ts[, P := I / N]
 SI.ts[, CIR := CI / N]
 SI.ts[, CDR := CD / N]
+
+
+
 
 #plot output
 SI.ts.long <- melt(SI.ts, id.vars = 'time')

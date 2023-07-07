@@ -21,58 +21,43 @@ library(viridis)
 rm(list=ls())                   # Clear all variables and functions
 
 
-setwd("C:/Users/corlendo/behavioural_detectives/Results")
+#setwd("./Results")
 ## Script that loads and plots our results 
 
-file_list <- load(file = "file_list.rda")
+b <- readRDS("./Results/file_list.rds")
 
 
-f  <- list()
-for(i in 1:3){
-  f[i] <- load(file = file.list[i])
+Results  <- list()
+#i = 2
+counter <-1
+for(i in 1:16){
+  Results[[i]]<- readRDS(paste0("Results/",b[i]))
+  Results[[i]][["model"]] <- counter
+  counter <- counter+1
 }
 
-# Use map_df to extract data from
-# multiple files in parallel
-extracted_data_list <- map_df(file.list,
-                              extract_data_from_file)
-
-#import data files
 
 
-no_effect_q_0_alpha_0_n_1 <- load(file = "no_effect_q_0_alpha_0_n_1.rda")
-no_effect_q_0_alpha_0_n_4 <- load(file = "no_effect_q_0_alpha_0_n_4.rda")
-hetero_effect_q_0_alpha_45_n_1.rda <- load(file = "hetero_effect_q_0_alpha_45_n_1.rda")
-hetero_effect_q_0_alpha_45_n_4.rda <- load(file = "hetero_effect_q_0_alpha_45_n_4.rda")
-behaviour_effect_q_4_alpha_45_n_1.rda <- load(file = "behaviour_effect_q_4_alpha_45_n_1.rda")
-behaviour_effect_q_4_alpha_45_n_4.rda <- load(file = "behaviour_effect_q_4_alpha_45_n_4.rda")
-behaviour_effect_q_10_alpha_45_n_1.rda <- load(file = "behaviour_effect_q_10_alpha_45_n_1.rda")
-behaviour_effect_q_10_alpha_45_n_4.rda <- load(file = "behaviour_effect_q_10_alpha_45_n_4.rda")
-both_effect_q_4_alpha_45_n_1.rda <- load(file="both_effect_q_4_alpha_45_n_1.rda")
-both_effect_q_4_alpha_45_n_4.rda <- load(file="both_effect_q_4_alpha_45_n_4.rda")
-both_effect_q_10_alpha_45_n_1.rda <- load(file="both_effect_q_10_alpha_45_n_1.rda")
-both_effect_q_10_alpha_45_n_4.rda <- load(file="both_effect_q_10_alpha_45_n_4.rda")
+#bind effects to be explored
 
-# Add id column
-SI.ts_behaviour_effect_q_10_alpha_45_n_1[,model:="MQ1"]
-SI.ts_behaviour_effect_q_10_alpha_45_n_4[,model:="MQ4"]
-SI.ts_behaviour_effect_q_4_alpha_45_n_1[,model:="Mq1"]
-SI.ts_behaviour_effect_q_4_alpha_45_n_4[,model:="Mq4"]
-SI.ts_both_effect_q_10_alpha_45_n_1[,model:="HMQ1"]
-SI.ts_both_effect_q_10_alpha_45_n_4[,model:="HMQ4"]  
-SI.ts_both_effect_q_4_alpha_45_n_1[,model:="HMq1"]
-SI.ts_both_effect_q_4_alpha_45_n_4[,model:="HMq4"]
-SI.ts_hetero_effect_q_0_alpha_45_n_1[,model:="H1"]
-SI.ts_hetero_effect_q_0_alpha_45_n_4[,model:="H4"]
-SI.ts_no_effect_q_0_alpha_0_n_1[,model:="B1"]
-SI.ts_no_effect_q_0_alpha_0_n_4[,model:="B4"]
+#explore half beta
 
-rbind(SI.ts_behaviour_effect_q_10_alpha_45_n_1,SI.ts_behaviour_effect_q_10_alpha_45_n_4,
-SI.ts_behaviour_effect_q_4_alpha_45_n_1,SI.ts_behaviour_effect_q_4_alpha_45_n_4,
-SI.ts_both_effect_q_10_alpha_45_n_1,SI.ts_both_effect_q_10_alpha_45_n_4,
-SI.ts_both_effect_q_4_alpha_45_n_1,SI.ts_both_effect_q_4_alpha_45_n_4,
-SI.ts_hetero_effect_q_0_alpha_45_n_1,SI.ts_hetero_effect_q_0_alpha_45_n_4,
-SI.ts_no_effect_q_0_alpha_0_n_1, SI.ts_no_effect_q_0_alpha_0_n_4)->plot_HIV
+
+vary_beta <- rbind(Results[[1]],Results[[2]],Results[[3]],Results[[4]],
+                   Results[[5]],Results[[6]],Results[[7]],Results[[8]])
+
+vary_beta.long <- melt(vary_beta, id.vars = 'time')
+
+vary_alpha <- rbind(Results[[1]],Results[[2]],Results[[3]],Results[[4]],
+                   Results[[9]],Results[[10]],Results[[11]],Results[[12]])
+
+vary_alpha.long <- melt(vary_alpha, id.vars = 'time')
+
+vary_q <- rbind(Results[[1]],Results[[2]],Results[[3]],Results[[4]],
+                   Results[[13]],Results[[14]],Results[[15]],Results[[16]])
+
+vary_q.long <- melt(vary_q, id.vars = 'time')
+
 
 
 
@@ -83,8 +68,8 @@ SI.ts_no_effect_q_0_alpha_0_n_1, SI.ts_no_effect_q_0_alpha_0_n_4)->plot_HIV
 )
 
 # New facet label names for supp variable
-supp.labs <- c("No effect", "Heterogeneity","Both effects","Behaviour")
-names(supp.labs) <- c("B4", "H4","HMQ4","MQ4")
+change.labels <- c("No effect", "Heterogeneity","Both effects","Behaviour")
+names(change.labels) <- c("B4", "H4","HMQ4","MQ4")
 
 # Create the plot
 p + facet_grid(

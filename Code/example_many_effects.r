@@ -138,9 +138,12 @@ for (i in 1:16) {
                    list_effects[[i]]$Beta,"_alpha",list_effects[[i]]$alpha,
                    "_n",list_effects[[i]]$n,"_q",list_effects[[i]]$q,sep="")
   a<- mylist[[i]]
-  save(a, file=paste("Results/",filename,sep="",".rda"))
-  file.list[i] <- paste0(filename,".rda")
+  saveRDS(a, file=paste("Results/",filename,sep="",".rds"))
+  file.list[i] <- paste0(filename,".rds")
 }
 
+saveRDS(file.list, file ="Results/file_list.rds")
 
-save(file.list, file=paste("Results/",filename="file_list",sep="",".rda"))
+
+
+
