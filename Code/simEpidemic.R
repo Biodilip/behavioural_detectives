@@ -6,13 +6,13 @@ require(boot); require(deSolve); require(ellipse);
 source("./Code/behaviouralODEs.r")
 
 # Sampling frequency
-seqMonth <- seq(1,max(time.out), by = 12)
+seqMonth <- seq(1,max(time.out), by = 1)
 
 # Number of Is based on number of selected box cars
 Is <- paste0('I',1:k) ## for easy indexing
 
 # into months
-tseqMonth <- seq(1,max(time.out), by = 12)
+tseqMonth <- seq(1,max(time.out), by = 1)
 
 
 ## Function to run the deterministic model simulation, based on the ODE system defined in HIV_SI().

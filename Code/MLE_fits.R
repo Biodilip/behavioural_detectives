@@ -1,5 +1,5 @@
 
-setwd("C:/Users/corlendo/behavioural_detectives")
+
 source("./Code/nllikelihood.R")
 
 ## First look up how optim() works. The more you read through the help
@@ -39,7 +39,9 @@ objFXN <- function(fit.params ## paramters to fit
 }
 
 
-objFXN(guess.params, disease_params())
+#result_list <- lapply(list_of_myDat, function(parms) nllikelihood(parms,  obsDat))
+
+# objFXN(guess.params, disease_params())
 
 ## Select initial values for fitted parameters from which optimization routine
 ## will start. If you select bad initial values the algorithm can get stuck on a
@@ -57,6 +59,9 @@ trace <- 3
 
 ## SANN: This is stochastic, be CAREFUL -- sometimes it gets stuck at local minima
 ## for unreasonble parameters. If you see this happen, run it again!
+
+
+
 
 optimization <- function(){
   optim.vals <- optim(par = init.pars
@@ -83,13 +88,25 @@ optimization <- function(){
   
   # output
   out <- cbind(t(MLEfits), trueParms2)
-  out_list <- list(optim.vals$par, out)
-  names(out_list) <- c('optim.vals', 'MLEfit') 
+  # out_list <- list(optim.vals$par, out)
+  # names(out_list) <- c('optim.vals', 'MLEfit') 
   
-  return(out_list)
+  return(out)
 }
 
-MLE_fits<- optimization()
+
+list_of_MLE_fits <- list()
+count= 1
+for (df in seq(1,length(list_of_myDat))){
+  myDat = list_of_myDat[[df]]
+  objFXN(guess.params, disease_params())
+  out <- optimization()
+  list_of_MLE_fits[[count]] <- out
+  count =count +1
+}
+
+
+#MLE_fits<- optimization()
 
 # MLE value / true value 
 
