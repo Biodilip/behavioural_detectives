@@ -13,6 +13,7 @@
 library(data.table)
 library(ggplot2)
 library(dplyr)
+library(purrr)
 library(viridis)
 
 
@@ -20,9 +21,21 @@ library(viridis)
 rm(list=ls())                   # Clear all variables and functions
 
 
+setwd("C:/Users/corlendo/behavioural_detectives/Results")
+## Script that loads and plots our results 
 
-setwd("C:/Users/corlendo/behavioural_detectives/base_parms_objects")
-## Script that plots our results 
+file_list <- load(file = "file_list.rda")
+
+
+f  <- list()
+for(i in 1:3){
+  f[i] <- load(file = file.list[i])
+}
+
+# Use map_df to extract data from
+# multiple files in parallel
+extracted_data_list <- map_df(file.list,
+                              extract_data_from_file)
 
 #import data files
 

@@ -6,16 +6,3 @@ hetero_lambda <- function(Bt,a,inf,total) {
   #output <- cbind(FOI,lambdahat)
   return (FOI)
 }
-# Bt <- 1.1
-# a  = 4
-# inf = SI.ts[,"I"]
-# total = SI.ts[,"N"]
-# 
-# test_het <-hetero_lambda(Bt,a,inf,total)
-# 
-# plot(SI.ts$P, test_het$I,'l')
-# 
-# plot(SI.ts$P, test_het$N,'l')
-# 
-# plot(test_het$I)
-# 

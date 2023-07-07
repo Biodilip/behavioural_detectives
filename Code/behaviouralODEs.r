@@ -28,17 +28,17 @@ source("code/HIV_SI_ODEs.r")
 
 ## Script that explores the effect of heterogeneity or behaviour on model 
 
-
 #1) Define the disease parameters
 ## Function that makes a list of disease parameters with default values
-disease_params <- function(Beta = 0.2/(30*2) ## transmission coefficient when prevalence is 0 
+disease_params <- function(Beta = 0.2/(30) ## transmission coefficient when prevalence is 0 
                            , alpha = 4.5 ## for transmission coefficient: decline with prevalence
-                           , n = 4 ## number of box  cars
+                           , n = 1 ## number of box  cars
                            , daysYear = 365 ## no of days in a year
                            , pRt = (1/(10*daysYear))*n ## rate of of progression through each of the I classes, for 10 years total
                            , bRt = 1/(60*daysYear) ## birth rate = death rates in a closed popn
                            , dRt = 1/(60*daysYear) ## 60 year natural life expectancy
-                           , q = 10 # effect of behaviour change on mortality
+                           , q =10 # effect of behaviour change on mortality
+                           , effect = 'none'
 ){
   return(as.list(environment()))
 }
@@ -55,26 +55,25 @@ pop.SI0 <- c(S=1-initPrev,
 noyears <- 40
 time.out <- seq(0, 365*noyears, 1)
 
-R0 = disease_params()[["Beta"]]/ (disease_params()[["pRt"]]+ disease_params()[["pRt"]])
+
+
 ## Solve ODE using lsoda and give our output in the data.table
 SI.ts <- data.table(lsoda(
-  y = pop.SI0,               # Initial conditions for population
-  times = time.out,             # Timepoints for evaluation
-  func = HIV_SI_ODEs,                   # Function to evaluate
-  parms = disease_params()               # Vector of parameters
-))
-
+   y = pop.SI0,               # Initial conditions for population
+   times = time.out,             # Timepoints for evaluation
+   func = HIV_SI_ODEs,                   # Function to evaluate
+   parms = disease_params()
+ ))
 
 
 SI.ts$I <- rowSums(SI.ts[,3:(k+2)])
-#SI.ts <- SI.ts[,-3:-(k+2)]
+SI.ts <- SI.ts[,-3:-(k+2)]
 SI.ts$N <- SI.ts[,I] + SI.ts[,S]
 SI.ts[, P := I / N]
 SI.ts[, CIR := CI / N]
 SI.ts[, CDR := CD / N]
+
 #plot output
-
-
 SI.ts.long <- melt(SI.ts, id.vars = 'time')
 
 (ggplot(SI.ts.long[variable %in% c('S', 'I', "P","CDR","CD","N")])
@@ -82,20 +81,4 @@ SI.ts.long <- melt(SI.ts, id.vars = 'time')
   + geom_line()
   + facet_wrap(~ variable,scales = "free")
 )
-
-
-SI.ts_hetero_effect_q_10_alpha_45_n_4_beta_half <- SI.ts.long
-
-#save to rda file
-#save(SI.ts_no_effect_q_10_alpha_25_n_4_beta_full, file = "no_effect_q_0_alpha_25_n_4_beta_full.rda")
-#save(SI.ts_hetero_effect_q_10_alpha_45_n_4_beta_half, file = "hetero_effect_q_10_alpha_45_n_4_beta_half.rda")
-#save(SI.ts_behaviour_effect_q_10_alpha_25_n_4_beta_full, file = "behaviour_effect_q_10_alpha_25_n_4_beta_full.rda")
-#save(SI.ts_both_effect_q_10_alpha_25_n_4_beta_full, file = "both_effect_q_10_alpha_25_n_4_beta_full.rda")
-
-
-
-#(ggplot(SI.ts.long)
- # + aes(x = time, y = value, color = variable, linetype = variable)
-#  + geom_line()
-#)
 
