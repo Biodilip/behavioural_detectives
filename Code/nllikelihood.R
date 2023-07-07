@@ -11,7 +11,7 @@ source("./Code/sampleEpidemic.R")
 ## a model parameterized by a given set of parameters:
 
 ## Return the negative log of likelihood by convention
-nllikelihood <- function(parms = disease_params(), obsDat=myDat) {
+nllikelihood <- function(parms = disease_params(), obsDat) {
   simDat <- simEpidemic(pop.SI0, parms=parms)
   ## What are the rows from our simulation at which we have observed data?
   matchedTimes <- simDat$time %in% obsDat$time
@@ -19,8 +19,10 @@ nllikelihood <- function(parms = disease_params(), obsDat=myDat) {
   return(sum(nlls))
 }
 
-nllikelihood(trueParms) ## loglikelihood of the true parameters (which we usually never know)
-nllikelihood(disease_params(Beta = 3, alpha = 1))  ## vs some random guessed parameters
+
+# obsDat= myDat
+# nllikelihood(trueParms) ## loglikelihood of the true parameters (which we usually never know)
+# nllikelihood(disease_params(Beta = 3, alpha = 1))  ## vs some random guessed parameters
 
 
 
